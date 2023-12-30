@@ -1,0 +1,74 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion 34
+    
+    defaultConfig {
+        applicationId "com.koustubh.armak2"
+        minSdkVersion 23
+        targetSdkVersion 34
+        versionCode 4
+        versionName "3"
+
+        // Add the namespace property here
+        namespace 'com.koustubh.armak'
+        resConfigs "en"
+        
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    signingConfigs {
+        release {
+            storeFile file("src/main/assets/keystore/key1.jks")
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias 'key1'
+            keyPassword RELEASE_STORE_PASSWORD // Add this line 
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            signingConfig signingConfigs.release
+        }
+    }
+    
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
+    lintOptions {
+        disable 'UnusedResources'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = false
+        }
+    }
+}
+
+dependencies {
+    def appCenterSdkVersion = '5.0.2'
+
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation 'junit:junit:4.13.2'
+}
