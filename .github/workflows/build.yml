@@ -13,6 +13,7 @@ jobs:
           artifacts: ${{ needs.build.outputs.artifacts }}
     env:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      MY_SECRET: ${{ secrets.PAT_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -68,7 +69,8 @@ jobs:
         - name: Debugging
           run: |
             echo "hey jude"
-            tree .
+            echo "My secret is $MY_SECRET"
+            #tree .
             #ls -R build-output
             #echo 'check 2'
             #ls -R ${{ github.workspace }}/build-output
@@ -78,4 +80,4 @@ jobs:
           with:
             token: ${{ secrets.PAT_TOKEN }}
             BRANCH: gh-pages
-            FOLDER: build-output/
+            FOLDER: build-output
