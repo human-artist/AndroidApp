@@ -48,32 +48,16 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // bundle {
-    //     language {
-    //         enableSplit = false
-    //     }
-    //     density {
-    //         enableSplit = false
-    //     }
-    //     abi {
-    //         enableSplit = false
-    //     }
-    // }
-    // Disable generating Android App Bundles
     bundle {
-        // Ensure bundle generation is disabled
-        enabled = false
-    }
-
-    // Configure APK generation
-    splits {
-        // Configure APK splits if needed
-        // For example, if you want to split by density
-        density {
-            enable true
-            // Specify configurations for density splits if needed
+        language {
+            enableSplit = false
         }
-        // Add configurations for other splits if needed
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = false
+        }
     }
 }
 
