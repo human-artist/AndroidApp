@@ -35,17 +35,17 @@ jobs:
         
       - name: Build Release APK
         run: |
-          #./gradlew bundleRelease
+          ./gradlew bundleRelease
           ### CLUE 1: above line generated aab. Below generates apk
-          ./gradlew assembleRelease
+          #./gradlew assembleRelease
         #  mkdir build-output
         #  mv app/build/outputs/bundle/release/* build-output/
       - name: Move build output
         run: |
           mkdir build-output
-          #mv app/build/outputs/bundle/release/* build-output/
+          mv app/build/outputs/bundle/release/* build-output/
           ### CLUE 1: above line generated aab. Below generates apk
-          mv app/build/outputs/apk/release/* build-output/
+          #mv app/build/outputs/apk/release/* build-output/
           echo "::set-output name=artifacts::build-output"
         id: set_output
 
