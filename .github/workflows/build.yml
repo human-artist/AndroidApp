@@ -42,7 +42,8 @@ jobs:
       - name: Move build output
         run: |
           mkdir build-output
-          mv app/build/outputs/bundle/release/* build-output/
+          #mv app/build/outputs/bundle/release/* build-output/
+          mv app/build/outputs/bundle/* build-output/
           echo "::set-output name=artifacts::build-output"
         id: set_output
 
