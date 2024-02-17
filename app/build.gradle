@@ -49,6 +49,9 @@ android {
     }
 
     bundle {
+        // Disable generating Android App Bundles. If this is false apk will be generated and lines #55 - # 63 will be ineffective
+        enabled = false
+        
         language {
             enableSplit = false
         }
