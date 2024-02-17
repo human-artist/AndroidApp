@@ -13,7 +13,6 @@ jobs:
           artifacts: ${{ needs.build.outputs.artifacts }}
     env:
       JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-      MY_SECRET: ${{ secrets.PAT_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -55,6 +54,9 @@ jobs:
   deploy:
       runs-on: ubuntu-latest
       needs: build
+      env:
+        MY_SECRET: ${{ secrets.PAT_TOKEN }}
+        MY_SECRET2: ${{ secrets.GITHUB_TOKEN }}
       steps:
         - name: Checkout code
           uses: actions/checkout@v2
@@ -70,6 +72,7 @@ jobs:
           run: |
             echo "hey jude"
             echo "My secret is $MY_SECRET"
+            echo "My secret2 is $MY_SECRET2"
             #tree .
             #ls -R build-output
             #echo 'check 2'
