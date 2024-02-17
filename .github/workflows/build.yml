@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir build-output
           #mv app/build/outputs/bundle/release/* build-output/
-          mv app/build/outputs/bundle/* build-output/
+          mv app/build/outputs/* build-output/
           echo "::set-output name=artifacts::build-output"
         id: set_output
 
