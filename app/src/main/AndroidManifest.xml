@@ -6,8 +6,10 @@
     
     <!-- START: ChatGPT recomms -->
     <!-- Permission for accessing the camera -->
-    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />
+
 
     <!-- Permission for accessing the microphone -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
