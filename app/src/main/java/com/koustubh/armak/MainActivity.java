@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebChromeClient;
 
 // https://stackoverflow.com/questions/68878785/failed-to-apply-plugin-com-android-internal-application-android-gradle-plug
 // This worked for me like a charm -> https://github.com/microsoft/appcenter/issues/2067
@@ -31,24 +32,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         AppCenter.start(getApplication(), "0ab76d51-463c-4f66-9121-8a7444bea564",
                 Analytics.class, Crashes.class);
-        this.webview = findViewById(R.id.webView);
-        this.webview.setBackgroundColor(0x00000000);
-        this.webview.setHorizontalScrollBarEnabled(false);
-        this.webview.getSettings().setJavaScriptEnabled(true);
-        this.webview.getSettings().setLoadsImagesAutomatically(true);
-        this.webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        this.webview.getSettings().setUseWideViewPort(true);
-        this.webview.getSettings().setDomStorageEnabled(true);
-        // this.webview.getSettings().setAppCacheEnabled(true);
-        this.webview.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-
-        //this.webview.getSettings().setAppCacheMaxSize(1024*1024*8);
         WebSettings websettings = this.webview.getSettings();
-        websettings.setDomStorageEnabled(true);  // Open DOM storage function
-        // websettings.setAppCachePath(appCachePath);
-        webview.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        websettings.setAllowFileAccess(true);    // Readable file cache
-        // websettings.setAppCacheEnabled(true);
+
+        this.webview = findViewById(R.id.webView);
+        setMyStuff();
+        
+
+       
 
         this.sharedpref = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String url = this.sharedpref.getString(KEY_URL,DEFAULT_URL);
@@ -57,38 +47,57 @@ public class MainActivity extends AppCompatActivity {
         String jsCommand2 = "window.sessionStorage=JSON.parse("+this.sharedpref.getString(KEY_SESSION_STORE,"{}")+")";
         this.webview.evaluateJavascript(jsCommand2, val-> this.print("Session storage set ..."+val));
         // Commented the following so routing can be handled by js app
+        this.webview.setWebChromeClient(new WebChromeClient());
         this.webview.loadUrl(url);
         //this.webview.loadUrl(DEFAULT_URL);
-        this.webview.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url)
-            {
-                view.loadUrl(url);
-                return true;
-            }
 
-            @Override
-            public void onReceivedError(final WebView view, int errorCode, String description,
-                                        final String failingUrl) {
-                // Log.d("develop"," hat!!" + description +" ghatak!"+failingUrl);
-                super.onReceivedError(view, errorCode, description, failingUrl);
-            }
+        // Request camera permission if not granted
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                // Log.d("develop",url);
-                //Save the last visited URL to shared preference
-                //saveUrl(url);
-            }
+        // this.webview.setWebViewClient(new WebViewClient() {
+        //     @Override
+        //     public boolean shouldOverrideUrlLoading(WebView view, String url)
+        //     {
+        //         view.loadUrl(url);
+        //         return true;
+        //     }
 
-            @Override
-            public void onLoadResource(WebView view, String url) {
-                // Log.d("develop"," onLoadResource"+url);
-                super.onLoadResource(view, url);
-            }
-        });
+        //     @Override
+        //     public void onReceivedError(final WebView view, int errorCode, String description,
+        //                                 final String failingUrl) {
+        //         // Log.d("develop"," hat!!" + description +" ghatak!"+failingUrl);
+        //         super.onReceivedError(view, errorCode, description, failingUrl);
+        //     }
 
+        //     @Override
+        //     public void onPageFinished(WebView view, String url) {
+        //         super.onPageFinished(view, url);
+        //         // Log.d("develop",url);
+        //         //Save the last visited URL to shared preference
+        //         //saveUrl(url);
+        //     }
+
+        //     @Override
+        //     public void onLoadResource(WebView view, String url) {
+        //         // Log.d("develop"," onLoadResource"+url);
+        //         super.onLoadResource(view, url);
+        //     }
+        // });
+    }
+    // Handle permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, reload the WebView
+                webView.reload();
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message)
+            }
+        }
     }
 
     @Override
@@ -123,5 +132,29 @@ public class MainActivity extends AppCompatActivity {
     }
     private void print(String ignoredS){
         // Log.d("develop",s);
+    }
+    private void setMyStuff(){
+        WebSettings websettings = this.webview.getSettings();
+        this.webview.setBackgroundColor(0x00000000);
+        this.webview.setHorizontalScrollBarEnabled(false);
+        websettings.setJavaScriptEnabled(true);
+        
+
+        websettings.setLoadsImagesAutomatically(true);
+        websettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        websettings.setUseWideViewPort(true);
+        websettings.setDomStorageEnabled(true);
+        // websettings.setAppCacheEnabled(true);
+        websettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+
+        //websettings.setAppCacheMaxSize(1024*1024*8);
+        
+        websettings.setDomStorageEnabled(true);  // Open DOM storage function
+        websettings.setMediaPlaybackRequiresUserGesture(false); // Allows autoplay of video elements
+
+        // websettings.setAppCachePath(appCachePath);
+        websettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        websettings.setAllowFileAccess(true);    // Readable file cache
+        // websettings.setAppCacheEnabled(true);
     }
 }
