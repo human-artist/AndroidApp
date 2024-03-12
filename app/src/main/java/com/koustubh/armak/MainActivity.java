@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.webview = findViewById(R.id.webView);
         setMyStuff();
-        
+        setupInterfaceForJS();
 
        
 
@@ -132,6 +132,21 @@ public class MainActivity extends AppCompatActivity {
     }
     private void print(String ignoredS){
         // Log.d("develop",s);
+    }
+    private void setupInterfaceForJS(){
+        // Accessing native methods and variables within a WebView in Android
+        this.webview.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void nativeMethod() {
+                // Native method implementation
+            }
+
+            @JavascriptInterface
+            public String nativeVariable() {
+                // Native variable implementation
+                return "value";
+            }
+        }, "NativeInterface");
     }
     private void setMyStuff(){
         WebSettings websettings = this.webview.getSettings();
