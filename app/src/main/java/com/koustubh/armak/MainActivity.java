@@ -15,6 +15,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
 
+import android.os.Build;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.webkit.JavascriptInterface;
+
+
+
 // https://stackoverflow.com/questions/68878785/failed-to-apply-plugin-com-android-internal-application-android-gradle-plug
 // This worked for me like a charm -> https://github.com/microsoft/appcenter/issues/2067
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_SESSION_STORE = "SESSION_STORAGE";
     private static final String MY_PREFS_NAME = "BOT_FILE";
     private static final String DEFAULT_URL = "https://nobilisperfectum.github.io/";
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
+
     private WebView webview;
     private SharedPreferences sharedpref;
     @SuppressLint("SetJavaScriptEnabled")
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, reload the WebView
-                webView.reload();
+                this.webview.reload();
             } else {
                 // Permission denied, handle accordingly (e.g., show a message)
             }
