@@ -1,4 +1,5 @@
 package com.koustubh.armak;
+import com.koustubh.armak.BuildConfig;
 
 import androidx.appcompat.app.AppCompatActivity;
 
