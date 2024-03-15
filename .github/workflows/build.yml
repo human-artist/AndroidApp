@@ -31,6 +31,7 @@ jobs:
         run: |
           ./gradlew app:dependencies --refresh-dependencies
           ./gradlew clean lintDebug -Dlint.baselines.continue=true --warning-mode all
+          ./gradlew assembleDebug
           ./gradlew build --stacktrace
         
       - name: Build Release APK
