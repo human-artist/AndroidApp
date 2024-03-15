@@ -19,6 +19,8 @@ import android.os.Build;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.webkit.JavascriptInterface;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 
@@ -154,6 +156,18 @@ public class MainActivity extends AppCompatActivity {
             public String nativeVariable() {
                 // Native variable implementation
                 return "value";
+            }
+
+            @JavascriptInterface
+            public String getBuildVersion() {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("versionName", BuildConfig.VERSION_NAME);
+                    jsonObject.put("versionCode", BuildConfig.VERSION_CODE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return jsonObject.toString();
             }
         }, "NativeInterface");
     }
