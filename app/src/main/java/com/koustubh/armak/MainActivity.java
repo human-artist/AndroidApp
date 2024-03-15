@@ -1,5 +1,5 @@
-package com.koustubh.armak2;
-import com.koustubh.armak2.BuildConfig;
+package com.koustubh.armak;
+// import com.koustubh.armak2.BuildConfig;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -163,8 +163,9 @@ public class MainActivity extends AppCompatActivity {
             public String getBuildVersion() {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("versionName", BuildConfig.VERSION_NAME);
-                    jsonObject.put("versionCode", BuildConfig.VERSION_CODE);
+                    // jsonObject.put("versionName", BuildConfig.VERSION_NAME);
+                    // jsonObject.put("versionCode", BuildConfig.VERSION_CODE);
+                    jsonObject.put("versionCode", 5);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
