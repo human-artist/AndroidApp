@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.util.Log;
+import android.webkit.ConsoleMessage;
+import android.webkit.PermissionRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebChromeClient;
@@ -18,8 +21,10 @@ import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 import com.facebook.stetho.Stetho;
 
+
+
 public class MainActivity extends AppCompatActivity {
-    private static final String KEY_URL = "BOT_URL";
+    private static final String KEY_URL = "https://nobilisperfectum.github.io/";
     private static final String KEY_LOCAL_STORE = "LOCAL_STORAGE";
     private static final String KEY_SESSION_STORE = "SESSION_STORAGE";
     private static final String MY_PREFS_NAME = "BOT_FILE";
@@ -40,11 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 Analytics.class, Crashes.class);
 
         webView = findViewById(R.id.webView);
-        webView.setWebViewClient(new MyWebViewClient());
-        WebView.setWebContentsDebuggingEnabled(true);
-        WebSettings webSettings = webView.getSettings();
         setWebViewSettings();
         setupInterfaceForJS();
+        webView.setWebViewClient(new MyWebViewClient());
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                Log.d("WebView", consoleMessage.message());
+                return true;
+            }
+        });
+
+        WebView.setWebContentsDebuggingEnabled(true);
+        WebSettings webSettings = webView.getSettings();
+
 
         sharedPreferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String url = sharedPreferences.getString(KEY_URL, DEFAULT_URL);
@@ -52,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript(jsCommand, val -> print("local storage set ..." + val));
         String jsCommand2 = "window.sessionStorage=JSON.parse(" + sharedPreferences.getString(KEY_SESSION_STORE, "{}") + ")";
         webView.evaluateJavascript(jsCommand2, val -> print("Session storage set ..." + val));
-
-        webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl(url);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -61,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
-
+//    @Override
+//    public void onPermissionRequest(final PermissionRequest request) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            request.grant(request.getResources());
+//        }
+//    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -104,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupInterfaceForJS() {
-        webView.addJavascriptInterface(new JavaScriptInterfaceSetup(), "NativeInterface");
+        webView.addJavascriptInterface(new JavaScriptInterfaceSetup(this), "NativeInterface");
     }
 
     private void setWebViewSettings() {
