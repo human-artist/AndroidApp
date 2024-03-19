@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
              // Need to accept permissions to use the camera
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
-                Log.d("onPermissionRequest");
+                // Log.d("onPermissionRequest");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     request.grant(request.getResources());
                 }
