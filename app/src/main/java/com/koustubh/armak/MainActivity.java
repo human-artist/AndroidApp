@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("WebView", consoleMessage.message());
                 return true;
             }
+
+             // Need to accept permissions to use the camera
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                Log.d("onPermissionRequest");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    request.grant(request.getResources());
+                }
+            }
         });
 
         WebView.setWebContentsDebuggingEnabled(true);
@@ -134,9 +143,12 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setUseWideViewPort(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        webSettings.setDomStorageEnabled(true);
+
         webSettings.setMediaPlaybackRequiresUserGesture(false);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         webSettings.setAllowFileAccess(true);
+
+
+        webSettings.setPluginState(WebSettings.PluginState.ON);
     }
 }
