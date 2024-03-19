@@ -24,11 +24,11 @@ import com.facebook.stetho.Stetho;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final String KEY_URL = "https://nobilisperfectum.github.io/";
+    private static final String KEY_URL = "https://inepay.github.io/";//"https://nobilisperfectum.github.io/";
     private static final String KEY_LOCAL_STORE = "LOCAL_STORAGE";
     private static final String KEY_SESSION_STORE = "SESSION_STORAGE";
     private static final String MY_PREFS_NAME = "BOT_FILE";
-    private static final String DEFAULT_URL = "https://nobilisperfectum.github.io/";
+    private static final String DEFAULT_URL = "https://inepay.github.io/";//"https://nobilisperfectum.github.io/";
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
     private WebView webView;
